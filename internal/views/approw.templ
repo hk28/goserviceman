@@ -1,0 +1,75 @@
+package views
+
+import "fmt"
+import "strconv"
+
+templ AppRow(vm AppVM) {
+	<tr id={ "row-" + SafeID(vm.Name) } class="border-b border-gray-100 hover:bg-gray-50">
+		<td class="py-3 pr-4">
+			<div class="font-semibold text-[#111827]">{ vm.Name }</div>
+			<div class="text-[11px] text-[#6b7280] mt-0.5 truncate max-w-[260px]" title={ vm.Executable }>{ vm.Executable }</div>
+		</td>
+		<td class="py-3 pr-4">
+			if vm.Running {
+				<span class={ BadgeOk }>running</span>
+			} else {
+				<span class={ BadgeStopped }>stopped</span>
+			}
+		</td>
+		<td class="py-3 pr-4 text-[#374151]">
+			if vm.Port > 0 {
+				{ strconv.Itoa(vm.Port) }
+			} else {
+				<span class="text-[#d1d5db]">—</span>
+			}
+		</td>
+		<td class="py-3">
+			<div class="flex items-center gap-2 flex-wrap">
+				<button
+					class={ BtnStart }
+					hx-post={ fmt.Sprintf("/app/%s/start", vm.Name) }
+					hx-target={ "#row-" + SafeID(vm.Name) }
+					hx-swap="outerHTML"
+					hx-disabled-elt="this"
+				>Start</button>
+				<button
+					class={ BtnStop }
+					hx-post={ fmt.Sprintf("/app/%s/stop", vm.Name) }
+					hx-target={ "#row-" + SafeID(vm.Name) }
+					hx-swap="outerHTML"
+					hx-disabled-elt="this"
+				>Stop</button>
+				<button
+					class={ BtnRestart }
+					hx-post={ fmt.Sprintf("/app/%s/restart", vm.Name) }
+					hx-target={ "#row-" + SafeID(vm.Name) }
+					hx-swap="outerHTML"
+					hx-disabled-elt="this"
+				>Restart</button>
+				if vm.Port > 0 {
+					<button
+						class={ BtnBrowser }
+						hx-post={ fmt.Sprintf("/app/%s/open-browser", vm.Name) }
+						hx-target={ "#browser-msg-" + SafeID(vm.Name) }
+						hx-swap="innerHTML"
+						hx-disabled-elt="this"
+					>Open Browser</button>
+					<span id={ "browser-msg-" + SafeID(vm.Name) } class="text-[11px] text-[#6b7280]"></span>
+				}
+				<button
+					class="px-2 py-1 text-[11px] text-[#6b7280] hover:text-[#004494] cursor-pointer bg-transparent border-0"
+					onclick={ toggleLog(SafeID(vm.Name)) }
+				>Logs ▾</button>
+			</div>
+			<div id={ "logwrap-" + SafeID(vm.Name) } class="hidden mt-3">
+				@LogPanel(LogVM{AppName: vm.Name})
+			</div>
+		</td>
+	</tr>
+}
+
+script toggleLog(id string) {
+	var el = document.getElementById('logwrap-' + id);
+	if (!el) return;
+	el.classList.toggle('hidden');
+}

@@ -1,0 +1,31 @@
+package views
+
+templ IndexPage(vm PageVM) {
+	@Layout("Dashboard") {
+		@DashboardContent(vm)
+	}
+}
+
+templ DashboardContent(vm PageVM) {
+	<div id="dashboard">
+		if len(vm.Apps) == 0 {
+			<p class="text-[#6b7280] text-sm">No apps configured. Add entries to your goserviceman.yaml and click Reload Config.</p>
+		} else {
+			<table class="w-full border-collapse">
+				<thead>
+					<tr class="text-left text-[11px] font-semibold text-[#6b7280] uppercase tracking-[.06em] border-b border-gray-200">
+						<th class="pb-2 pr-4">App</th>
+						<th class="pb-2 pr-4">Status</th>
+						<th class="pb-2 pr-4">Port</th>
+						<th class="pb-2">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, app := range vm.Apps {
+						@AppRow(app)
+					}
+				</tbody>
+			</table>
+		}
+	</div>
+}

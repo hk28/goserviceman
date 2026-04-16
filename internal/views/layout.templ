@@ -1,0 +1,50 @@
+package views
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } — goserviceman</title>
+			<script src="https://cdn.tailwindcss.com"></script>
+			<script>
+				tailwind.config = {
+					theme: {
+						extend: {
+							colors: {
+								surface:  '#f5f7fa',
+								elevated: '#ffffff',
+								accent:   '#004494',
+								muted:    '#6b7280',
+								dim:      '#d1d5db',
+								ok:       '#16a34a',
+								warn:     '#d97706',
+								danger:   '#dc2626',
+							}
+						}
+					}
+				}
+			</script>
+			<style>
+				.htmx-indicator { display: none; }
+				.htmx-request .htmx-indicator,
+				.htmx-request.htmx-indicator { display: inline; }
+			</style>
+			<script src="/static/htmx.min.js" defer></script>
+		</head>
+		<body class="bg-[#f5f7fa] text-[#111827] font-sans text-sm leading-normal antialiased min-h-screen">
+			<header class="bg-[#004494] px-8 py-4 flex items-center justify-between shadow-sm">
+				<h1 class="text-[15px] font-bold tracking-tight text-white">goserviceman</h1>
+				<button
+					class="px-3 py-1.5 rounded-[6px] text-[12px] font-semibold bg-white/[.12] text-white border border-white/[.25] hover:bg-white/[.22] cursor-pointer"
+					hx-post="/reload-config"
+					hx-disabled-elt="this"
+				>Reload Config</button>
+			</header>
+			<main class="px-8 py-7" id="main-content">
+				{ children... }
+			</main>
+		</body>
+	</html>
+}

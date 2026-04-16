@@ -1,0 +1,28 @@
+version: '3'
+
+tasks:
+  generate:
+    desc: Compile templ templates
+    cmds:
+      - templ generate
+
+  build:
+    desc: Build for the current platform
+    deps: [generate]
+    cmds:
+      - go build -o goserviceman{{exeExt}} .
+
+  build-windows:
+    desc: Cross-compile for Windows (no console window)
+    deps: [generate]
+    env:
+      GOOS: windows
+      GOARCH: amd64
+    cmds:
+      - go build -ldflags "-H windowsgui" -o goserviceman.exe .
+
+  run:
+    desc: Build and run
+    deps: [build]
+    cmds:
+      - ./goserviceman{{exeExt}}

@@ -1,0 +1,25 @@
+package views
+
+import "fmt"
+
+templ LogPanel(vm LogVM) {
+	<div
+		id={ "log-" + SafeID(vm.AppName) }
+		hx-get={ fmt.Sprintf("/app/%s/logs", vm.AppName) }
+		hx-trigger="every 3s"
+		hx-swap="outerHTML"
+		class="bg-[#f0f4f8] border border-gray-200 rounded-[6px] p-3"
+	>
+		if vm.Error != "" {
+			<p class="text-[#dc2626] text-[11px]">{ vm.Error }</p>
+		} else if len(vm.Lines) == 0 {
+			<p class="text-[#9ca3af] text-[11px] italic">No log output yet.</p>
+		} else {
+			<pre class="text-[11px] text-[#1e293b] font-mono leading-[1.55] whitespace-pre-wrap break-all overflow-y-auto max-h-[260px]">
+				for _, line := range vm.Lines {
+					{ line }{ "\n" }
+				}
+			</pre>
+		}
+	</div>
+}

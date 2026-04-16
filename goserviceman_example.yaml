@@ -1,0 +1,6 @@
+apps:
+  - name: "example-app"
+    executable: "/usr/bin/python3"
+    args: ["-m", "http.server", "8081"]
+    port: 8081
+    log_file: "/tmp/example-app.log"
