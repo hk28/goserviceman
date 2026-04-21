@@ -2,13 +2,15 @@ package process
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"sync"
 
-	"github.com/mitchellh/go-ps"
 	"goserviceman/internal/config"
+
+	"github.com/mitchellh/go-ps"
 )
 
 // Status represents whether a managed process is running or stopped.
@@ -70,6 +72,23 @@ func (m *ProcManager) Reattach() {
 	}
 }
 
+// StartImmediately starts any configured apps marked for automatic startup.
+func (m *ProcManager) StartImmediately() {
+	for _, app := range m.apps {
+		if !app.StartImmediately {
+			continue
+		}
+		if m.StatusOf(app.Name) == StatusRunning {
+			continue
+		}
+		if err := m.Start(app.Name); err != nil {
+			log.Printf("auto-start %s: %v", app.Name, err)
+		} else {
+			log.Printf("auto-started %s", app.Name)
+		}
+	}
+}
+
 // Start launches the named application.
 func (m *ProcManager) Start(name string) error {
 	m.mu.Lock()
@@ -87,6 +106,7 @@ func (m *ProcManager) Start(name string) error {
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("starting %s: %w", name, err)
 	}
+	log.Printf("started %s (pid %d)", name, cmd.Process.Pid)
 
 	entry := &procEntry{PID: cmd.Process.Pid, Cmd: cmd}
 	m.entries[name] = entry

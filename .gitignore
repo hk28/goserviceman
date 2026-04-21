@@ -2,3 +2,4 @@ goserviceman
 goserviceman.exe
 *_templ.go
 goserviceman.yaml
+log

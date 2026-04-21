@@ -95,6 +95,7 @@ func (s *Server) handleReloadConfig(w http.ResponseWriter, r *http.Request) {
 	s.apps = apps
 	s.mgr = process.New(apps)
 	s.mgr.Reattach()
+	s.mgr.StartImmediately()
 	w.Header().Set("HX-Refresh", "true")
 	w.WriteHeader(http.StatusNoContent)
 }

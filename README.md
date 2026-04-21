@@ -38,6 +38,7 @@ apps:
     args: ["--port", "8081"]
     port: 8081
     log_file: "/var/log/myapi/app.log"
+    start_immediately: true
 
   - name: "Worker"
     executable: "/usr/local/bin/worker"
@@ -53,6 +54,7 @@ apps:
 | `args`       | Command-line arguments (optional)                        |
 | `port`       | Port of the app's web interface; `0` to disable          |
 | `log_file`   | Path to the log file to tail                             |
+| `start_immediately` | Start the app automatically when goserviceman loads it |
 
 ## CLI flags
 

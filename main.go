@@ -28,6 +28,7 @@ func main() {
 
 	mgr := process.New(apps)
 	mgr.Reattach()
+	mgr.StartImmediately()
 
 	srv := server.New(mgr, apps, *cfgPath, staticFiles)
 

@@ -9,11 +9,12 @@ import (
 
 // AppConfig holds the configuration for a single managed application.
 type AppConfig struct {
-	Name       string   `yaml:"name"`
-	Executable string   `yaml:"executable"`
-	Args       []string `yaml:"args"`
-	Port       int      `yaml:"port"`
-	LogFile    string   `yaml:"log_file"`
+	Name             string   `yaml:"name"`
+	Executable       string   `yaml:"executable"`
+	Args             []string `yaml:"args"`
+	Port             int      `yaml:"port"`
+	LogFile          string   `yaml:"log_file"`
+	StartImmediately bool     `yaml:"start_immediately"`
 }
 
 type fileSchema struct {
