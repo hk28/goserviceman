@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"goserviceman/internal/config"
 	"goserviceman/internal/process"
+
+	"github.com/a-h/templ"
 )
 
 // Server holds the shared dependencies for all HTTP handlers.
@@ -30,6 +31,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /", s.handleIndex)
 	mux.Handle("GET /static/", http.FileServer(http.FS(s.staticFiles)))
 
+	mux.HandleFunc("GET /app/{name}/status", s.handleStatus)
 	mux.HandleFunc("GET /app/{name}/logs", s.handleLogs)
 	mux.HandleFunc("POST /app/{name}/start", s.handleStart)
 	mux.HandleFunc("POST /app/{name}/stop", s.handleStop)

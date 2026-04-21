@@ -3,6 +3,21 @@ package views
 import "fmt"
 import "strconv"
 
+templ StatusBadge(vm AppVM) {
+	<span
+		id={ "status-" + SafeID(vm.Name) }
+		hx-get={ fmt.Sprintf("/app/%s/status", vm.Name) }
+		hx-trigger="every 30s"
+		hx-swap="outerHTML"
+	>
+		if vm.Running {
+			<span class={ BadgeOk }>{ vm.StatusText }</span>
+		} else {
+			<span class={ BadgeStopped }>{ vm.StatusText }</span>
+		}
+	</span>
+}
+
 templ AppRow(vm AppVM) {
 	<tr id={ "row-" + SafeID(vm.Name) } class="border-b border-gray-100 hover:bg-gray-50">
 		<td class="py-3 pr-4">
@@ -10,11 +25,7 @@ templ AppRow(vm AppVM) {
 			<div class="text-[11px] text-[#6b7280] mt-0.5 truncate max-w-[260px]" title={ vm.Executable }>{ vm.Executable }</div>
 		</td>
 		<td class="py-3 pr-4">
-			if vm.Running {
-				<span class={ BadgeOk }>running</span>
-			} else {
-				<span class={ BadgeStopped }>stopped</span>
-			}
+			@StatusBadge(vm)
 		</td>
 		<td class="py-3 pr-4 text-[#374151]">
 			if vm.Port > 0 {

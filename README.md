@@ -9,6 +9,7 @@ A lightweight web-based process manager. Configure your apps in a YAML file and 
 - One-click browser launch for apps with a web interface
 - YAML config — no database, no daemon
 - Detects already-running processes on startup (survives restarts)
+- Process status auto-refreshes every 30 seconds in the dashboard
 - Runs on Linux and Windows
 
 ## Requirements

@@ -21,6 +21,16 @@ func (s *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
 	render(w, r, views.IndexPage(vm))
 }
 
+func (s *Server) handleStatus(w http.ResponseWriter, r *http.Request) {
+	name := r.PathValue("name")
+	app, ok := s.appByName(name)
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+	render(w, r, views.StatusBadge(BuildAppVM(app, s.mgr.StatusOf(name))))
+}
+
 func (s *Server) handleLogs(w http.ResponseWriter, r *http.Request) {
 	name := r.PathValue("name")
 	app, ok := s.appByName(name)
